@@ -36,6 +36,10 @@ bower_components
 
 # Compiled binary addons (https://nodejs.org/api/addons.html)
 build/Release
+build
+.vscode
+.husky
+6
 
 # Dependency directories
 node_modules/

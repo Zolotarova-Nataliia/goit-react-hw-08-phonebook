@@ -1,0 +1,10 @@
+.App {
+  display: flex;
+  flex-direction: column;
+  text-align: center;
+  justify-content: center;
+  align-items: center;
+}
+body {
+  background: #3e3e3e;
+}
