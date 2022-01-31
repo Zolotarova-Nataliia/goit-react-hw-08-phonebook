@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { nanoid } from "nanoid";
 import "./App.css";
 import { Contacts, Filter, Form } from "./components/index";
@@ -38,6 +38,9 @@ export function App() {
       prevState.filter((contact) => contact.id !== id)
     );
   };
+  useEffect(() => {
+    localStorage.setItem(LOCAL_KEY, JSON.stringify(contacts));
+  });
 
   const findedContacts = findContacts();
   return (
