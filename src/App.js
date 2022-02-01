@@ -8,7 +8,7 @@ const LOCAL_KEY = "contacts";
 export function App() {
   const [filter, setFilter] = useState("");
   const [contacts, setContacts] = useState(() => {
-    return JSON.parse(localStorage.getItem(LOCAL_KEY)) ?? [];
+    return JSON.parse(window.localStorage.getItem(LOCAL_KEY)) ?? [];
   });
 
   const formSubmitHandler = (data) => {
