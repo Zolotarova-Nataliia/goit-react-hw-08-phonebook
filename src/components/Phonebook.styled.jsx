@@ -5,7 +5,7 @@ export const FormTitle = styled.h1`
   font-weight: 700;
   position: relative;
   display: flex;
-  color: #fcf1b1;
+  color: #e72828;
   font-size: 26px;
   &::after {
     content: "";
@@ -15,14 +15,14 @@ export const FormTitle = styled.h1`
     bottom: -10px;
     width: 100%;
     height: 4px;
-    background: #fcf1b1;
+    background: #e72828;
   }
 `;
 
 export const FormSubtitle = styled.h2`
   font-family: "Montserrat", sans-serif;
   font-weight: 700;
-  color: #fcf1b1;
+  color: #e72828;
   font-size: 20px;
 `;
 
@@ -57,17 +57,17 @@ export const FormInput = styled.input`
 
 export const FormBtn = styled.button`
   background: none;
-  border: 1px solid #fcf1b1;
+  border: 1px solid #e72828;
   font-family: "Montserrat", sans-serif;
-  color: #fcf1b1;
+  color: #e72828;
   font-size: 14px;
   height: 30px;
   padding: 5px 20px;
   cursor: pointer;
   outline: none;
   &:hover {
-    color: #ecdf90;
-    border: 1px solid #ecdf90;
+    color: #ff0000;
+    border: 1px solid #ff0000;
   }
 `;
 

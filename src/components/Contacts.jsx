@@ -1,17 +1,27 @@
 import React, { Fragment } from "react";
-import PropTypes from "prop-types";
+import { useSelector, useDispatch } from "react-redux";
+import { removeFromContacts } from "../redux/contactSlice";
 import { FormText, FormList, FormListItem, FormBtn } from "./Phonebook.styled";
 
-const Contacts = ({ contacts, deleteContact }) => {
+const Contacts = () => {
+  const allContacts = useSelector((state) => state.contacts.items);
+  const filter = useSelector((state) => state.contacts.filter);
+  const dispatch = useDispatch();
+  const filteredContacts = allContacts.filter((contact) =>
+    contact.name.toLowerCase().includes(filter.toLowerCase())
+  );
+
   return (
     <Fragment>
-      {contacts.length !== 0 ? (
+      {filteredContacts.length !== 0 ? (
         <FormList>
-          {contacts.map((contact) => (
-            <FormListItem key={contact.id}>
+          {filteredContacts.map((contact) => (
+            <FormListItem key={contact.name}>
               <FormText>{contact.name}:</FormText>
               <FormText>{contact.number}</FormText>
-              <FormBtn onClick={() => deleteContact(contact.id)}>
+              <FormBtn
+                onClick={() => dispatch(removeFromContacts(contact.name))}
+              >
                 Delete
               </FormBtn>
             </FormListItem>
@@ -22,10 +32,6 @@ const Contacts = ({ contacts, deleteContact }) => {
       )}
     </Fragment>
   );
-};
-Contacts.propTypes = {
-  contacts: PropTypes.arrayOf(PropTypes.objectOf(PropTypes.string)).isRequired,
-  deleteContact: PropTypes.func,
 };
 
 export default Contacts;

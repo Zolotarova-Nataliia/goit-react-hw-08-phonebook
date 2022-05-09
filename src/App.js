@@ -1,16 +1,15 @@
-import { useEffect, useState } from "react";
-import { nanoid } from "nanoid";
+import { useDispatch, useSelector } from "react-redux";
 import "./App.css";
+import { store } from "./redux/store";
+import { Provider } from "react-redux";
 import { Contacts, Filter, Form } from "./components/index";
 import { FormTitle, FormSubtitle } from "./components/Phonebook.styled";
-const LOCAL_KEY = "contacts";
+import { addToContacts, addFilter } from "./redux/contactSlice";
 
 export function App() {
-  const [filter, setFilter] = useState("");
-  const [contacts, setContacts] = useState(() => {
-    return JSON.parse(window.localStorage.getItem(LOCAL_KEY)) ?? [];
-  });
-
+  const dispatch = useDispatch();
+  const contacts = useSelector((state) => state.contacts.items);
+  const filter = useSelector((state) => state.contacts.filter);
   const formSubmitHandler = (data) => {
     const { name, number } = data;
     const addedContact = contacts.find(
@@ -20,40 +19,23 @@ export function App() {
       alert(`${name} is already in contacts.`);
       return;
     }
-    setContacts((prevState) => [{ name, id: nanoid(), number }, ...prevState]);
+    dispatch(addToContacts({ name, number }));
   };
 
   const filterHandler = (event) => {
-    setFilter(event.currentTarget.value);
+    dispatch(addFilter(event.currentTarget.value));
   };
 
-  const findContacts = () => {
-    const filteredContacts = contacts.filter((contact) =>
-      contact.name.toLowerCase().includes(filter.toLowerCase())
-    );
-    return filteredContacts;
-  };
-  const deleteContact = (id) => {
-    setContacts((prevState) =>
-      prevState.filter((contact) => contact.id !== id)
-    );
-  };
-  useEffect(() => {
-    localStorage.setItem(LOCAL_KEY, JSON.stringify(contacts));
-  });
-
-  const findedContacts = findContacts();
   return (
     <div className="App">
-      <FormTitle>Phonebook</FormTitle>
-      <Form onSubmit={formSubmitHandler}></Form>
+      <Provider store={store}>
+        <FormTitle>Phonebook</FormTitle>
+        <Form onSubmit={formSubmitHandler}></Form>
 
-      <FormSubtitle>Contacts</FormSubtitle>
-      <Filter value={contacts.name} onChange={filterHandler}></Filter>
-      <Contacts
-        contacts={findedContacts}
-        deleteContact={deleteContact}
-      ></Contacts>
+        <FormSubtitle>Contacts</FormSubtitle>
+        <Filter value={filter} onChange={filterHandler}></Filter>
+        <Contacts />
+      </Provider>
     </div>
   );
 }

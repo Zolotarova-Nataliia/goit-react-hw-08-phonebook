@@ -1,12 +1,10 @@
 import { Fragment, useState } from "react";
 import PropTypes from "prop-types";
 import { StyledForm, FormLabel, FormInput, FormBtn } from "./Phonebook.styled";
-const LOCAL_KEY = "contacts";
 
 export default function Form({ onSubmit }) {
   const [name, setName] = useState("");
   const [number, setNumber] = useState("");
-
   const handleChange = (event) => {
     const { name, value } = event.target;
     switch (name) {
