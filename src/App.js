@@ -31,7 +31,6 @@ export function App() {
       <Provider store={store}>
         <FormTitle>Phonebook</FormTitle>
         <Form onSubmit={formSubmitHandler}></Form>
-
         <FormSubtitle>Contacts</FormSubtitle>
         <Filter value={filter} onChange={filterHandler}></Filter>
         <Contacts />
