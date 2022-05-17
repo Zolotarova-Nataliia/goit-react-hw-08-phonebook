@@ -1,8 +1,4 @@
-import {
-  configureStore,
-  combineReducers,
-  getDefaultMiddleware,
-} from "@reduxjs/toolkit";
+import { configureStore, getDefaultMiddleware } from "@reduxjs/toolkit";
 import logger from "redux-logger";
 import {
   persistStore,
@@ -26,17 +22,16 @@ const middleware = [
   logger,
 ];
 
-const persistConfig = {
+const contacstPersistConfig = {
   key: "contacts",
   storage,
+  blacklist: ["filter"],
 };
 
-const rootReducer = combineReducers({ contacts: contactsSlice.reducer });
-
-const persistedReducer = persistReducer(persistConfig, rootReducer);
-
 export const store = configureStore({
-  reducer: persistedReducer,
+  reducer: {
+    contacts: persistReducer(contacstPersistConfig, contactsSlice.reducer),
+  },
   middleware,
 });
 
