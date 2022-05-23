@@ -1,40 +1,65 @@
-import { useDispatch, useSelector } from "react-redux";
 import "./App.css";
-import { store } from "./redux/store";
-import { Provider } from "react-redux";
-import { Contacts, Filter, Form } from "./components/index";
-import { FormTitle, FormSubtitle } from "./components/Phonebook.styled";
-import { addToContacts, addFilter } from "./redux/contactSlice";
+import { useEffect, lazy, Suspense } from "react";
+import { Route, Routes, Navigate } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import Spinner from "react-spinkit";
+import { AppBar } from "./components/AppBar/AppBar";
+import { getCurrentUser } from "./redux/auth/authOperations";
+import PrivateRoute from "./components/PrivateRoute";
+import PublicRoute from "./components/PublicRoute";
+
+const RegistrationView = lazy(() => import("./views/RegistrationView"));
+const HomepageView = lazy(() => import("./views/HomepageView"));
+const LoginView = lazy(() => import("./views/LoginView"));
+const ContactsView = lazy(() => import("./views/ContactsView"));
 
 export function App() {
   const dispatch = useDispatch();
-  const contacts = useSelector((state) => state.contacts.items);
-  const filter = useSelector((state) => state.contacts.filter);
-  const formSubmitHandler = (data) => {
-    const { name, number } = data;
-    const addedContact = contacts.find(
-      (contact) => contact.name.toLowerCase() === name.toLowerCase()
-    );
-    if (addedContact) {
-      alert(`${name} is already in contacts.`);
-      return;
-    }
-    dispatch(addToContacts({ name, number }));
-  };
-
-  const filterHandler = (event) => {
-    dispatch(addFilter(event.currentTarget.value));
-  };
-
+  useEffect(() => {
+    dispatch(getCurrentUser());
+  });
   return (
     <div className="App">
-      <Provider store={store}>
-        <FormTitle>Phonebook</FormTitle>
-        <Form onSubmit={formSubmitHandler}></Form>
-        <FormSubtitle>Contacts</FormSubtitle>
-        <Filter value={filter} onChange={filterHandler}></Filter>
-        <Contacts />
-      </Provider>
+      <AppBar />
+      <Suspense
+        fallback={<Spinner name="ball-spin-fade-loader" color="#ffff" />}
+      >
+        <Routes>
+          <Route
+            path="/"
+            element={
+              <PublicRoute>
+                <HomepageView />
+              </PublicRoute>
+            }
+          />
+          <Route
+            path="/register"
+            element={
+              <PublicRoute restricted>
+                <RegistrationView />
+              </PublicRoute>
+            }
+          />
+          <Route
+            path="/login"
+            element={
+              <PublicRoute restricted>
+                <LoginView />
+              </PublicRoute>
+            }
+          />
+          <Route
+            path="/contacts"
+            element={
+              <PrivateRoute>
+                <ContactsView />
+              </PrivateRoute>
+            }
+          />
+          <Route path="*" element={<Navigate to="/" replace />} />
+        </Routes>
+      </Suspense>
     </div>
   );
 }
